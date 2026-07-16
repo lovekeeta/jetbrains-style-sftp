@@ -1,0 +1,317 @@
+{
+  "name": "remote-deploy",
+  "displayName": "CG Remote Deploy",
+  "description": "Browse SFTP servers, compare local files, and deploy changes from VS Code.",
+  "version": "0.0.4",
+  "publisher": "local",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onView:remoteDeploy.explorer",
+    "onView:remoteDeploy.explorerFallback",
+    "onCommand:remoteDeploy.configure",
+    "onCommand:remoteDeploy.addMapping",
+    "onCommand:remoteDeploy.uploadDefault",
+    "onCommand:remoteDeploy.previewDeployDefault",
+    "onCommand:remoteDeploy.compareDefault",
+    "onCommand:remoteDeploy.compareClipboard",
+    "onCommand:remoteDeploy.upload",
+    "onCommand:remoteDeploy.previewDeploy",
+    "onCommand:remoteDeploy.download",
+    "onCommand:remoteDeploy.previewRemote",
+    "onCommand:remoteDeploy.renameRemote",
+    "onCommand:remoteDeploy.deleteRemote",
+    "onCommand:remoteDeploy.syncLocal",
+    "onCommand:remoteDeploy.compare",
+    "onCommand:remoteDeploy.selectServer",
+    "onCommand:remoteDeploy.refresh"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "remoteDeploy",
+          "title": "CG Remote Deploy",
+          "icon": "media/remote-host.svg"
+        }
+      ]
+    },
+    "submenus": [
+      {
+        "id": "remoteDeploy.localActions",
+        "label": "CG Remote Deploy"
+      }
+    ],
+    "views": {
+      "remoteDeploy": [
+        {
+          "id": "remoteDeploy.explorer",
+          "name": "Remote Files"
+        }
+      ],
+      "explorer": [
+        {
+          "id": "remoteDeploy.explorerFallback",
+          "name": "Remote Host"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "remoteDeploy.configure",
+        "title": "Configuration"
+      },
+      {
+        "command": "remoteDeploy.addMapping",
+        "title": "Add Path Mapping"
+      },
+      {
+        "command": "remoteDeploy.uploadDefault",
+        "title": "Upload to Default SFTP"
+      },
+      {
+        "command": "remoteDeploy.previewDeployDefault",
+        "title": "Sync with Deployed on Default SFTP"
+      },
+      {
+        "command": "remoteDeploy.compareDefault",
+        "title": "Compare with Default SFTP"
+      },
+      {
+        "command": "remoteDeploy.upload",
+        "title": "Upload to Selected SFTP..."
+      },
+      {
+        "command": "remoteDeploy.previewDeploy",
+        "title": "Sync with Deployed on Selected SFTP..."
+      },
+      {
+        "command": "remoteDeploy.download",
+        "title": "Download from Here..."
+      },
+      {
+        "command": "remoteDeploy.previewRemote",
+        "title": "Preview Remote File"
+      },
+      {
+        "command": "remoteDeploy.renameRemote",
+        "title": "Rename..."
+      },
+      {
+        "command": "remoteDeploy.deleteRemote",
+        "title": "Delete..."
+      },
+      {
+        "command": "remoteDeploy.syncLocal",
+        "title": "Sync With Local..."
+      },
+      {
+        "command": "remoteDeploy.compareLocal",
+        "title": "Compare with Local"
+      },
+      {
+        "command": "remoteDeploy.compare",
+        "title": "Compare with Selected SFTP..."
+      },
+      {
+        "command": "remoteDeploy.compareClipboard",
+        "title": "Compare with Clipboard"
+      },
+      {
+        "command": "remoteDeploy.selectServer",
+        "title": "Select Server",
+        "icon": "$(server)"
+      },
+      {
+        "command": "remoteDeploy.refresh",
+        "title": "Refresh Remote Files",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "remoteDeploy.showLog",
+        "title": "Show File Transfer Log"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "remoteDeploy.selectServer",
+          "when": "view == remoteDeploy.explorer || view == remoteDeploy.explorerFallback",
+          "group": "navigation@1"
+        },
+        {
+          "command": "remoteDeploy.configure",
+          "when": "view == remoteDeploy.explorer || view == remoteDeploy.explorerFallback",
+          "group": "navigation@2"
+        },
+        {
+          "command": "remoteDeploy.refresh",
+          "when": "view == remoteDeploy.explorer || view == remoteDeploy.explorerFallback",
+          "group": "navigation@4"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "remoteDeploy.download",
+          "when": "(view == remoteDeploy.explorer || view == remoteDeploy.explorerFallback) && (viewItem == file || viewItem == directory)",
+          "group": "remote@1"
+        },
+        {
+          "command": "remoteDeploy.syncLocal",
+          "when": "(view == remoteDeploy.explorer || view == remoteDeploy.explorerFallback) && (viewItem == file || viewItem == directory)",
+          "group": "remote@2"
+        },
+        {
+          "command": "remoteDeploy.renameRemote",
+          "when": "(view == remoteDeploy.explorer || view == remoteDeploy.explorerFallback) && (viewItem == file || viewItem == directory)",
+          "group": "remote@3"
+        },
+        {
+          "command": "remoteDeploy.deleteRemote",
+          "when": "(view == remoteDeploy.explorer || view == remoteDeploy.explorerFallback) && (viewItem == file || viewItem == directory)",
+          "group": "remote@4"
+        },
+        {
+          "command": "remoteDeploy.compareLocal",
+          "when": "(view == remoteDeploy.explorer || view == remoteDeploy.explorerFallback) && viewItem == file",
+          "group": "remote@5"
+        }
+      ],
+      "explorer/context": [
+        {
+          "submenu": "remoteDeploy.localActions",
+          "when": "resourceScheme == file",
+          "group": "6_cgRemoteDeploy@1"
+        },
+        {
+          "command": "remoteDeploy.compareClipboard",
+          "when": "resourceScheme == file",
+          "group": "6_cgRemoteDeploy@2"
+        }
+      ],
+      "editor/context": [
+        {
+          "submenu": "remoteDeploy.localActions",
+          "when": "resourceScheme == file",
+          "group": "9_cutcopypaste@0"
+        },
+        {
+          "command": "remoteDeploy.compareClipboard",
+          "when": "resourceScheme == file",
+          "group": "9_cutcopypaste@1"
+        }
+      ],
+      "remoteDeploy.localActions": [
+        {
+          "command": "remoteDeploy.uploadDefault",
+          "when": "resourceScheme == file",
+          "group": "1_default@1"
+        },
+        {
+          "command": "remoteDeploy.previewDeployDefault",
+          "when": "resourceScheme == file",
+          "group": "1_default@2"
+        },
+        {
+          "command": "remoteDeploy.compareDefault",
+          "when": "resourceScheme == file",
+          "group": "1_default@3"
+        },
+        {
+          "command": "remoteDeploy.upload",
+          "when": "resourceScheme == file",
+          "group": "2_select@1"
+        },
+        {
+          "command": "remoteDeploy.previewDeploy",
+          "when": "resourceScheme == file",
+          "group": "2_select@2"
+        },
+        {
+          "command": "remoteDeploy.compare",
+          "when": "resourceScheme == file",
+          "group": "2_select@3"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "CG Remote Deploy",
+      "properties": {
+        "remoteDeploy.profiles": {
+          "type": "array",
+          "default": [],
+          "description": "Named SFTP deployment profiles, including groups and profile-owned path mappings."
+        },
+        "remoteDeploy.defaultProfileId": {
+          "type": "string",
+          "default": "",
+          "description": "The SFTP profile used by default for this VS Code workspace."
+        },
+        "remoteDeploy.host": {
+          "type": "string",
+          "default": "",
+          "description": "Legacy single-profile SFTP hostname."
+        },
+        "remoteDeploy.port": {
+          "type": "number",
+          "default": 22,
+          "description": "SFTP port."
+        },
+        "remoteDeploy.username": {
+          "type": "string",
+          "default": "",
+          "description": "SFTP username."
+        },
+        "remoteDeploy.remoteRoot": {
+          "type": "string",
+          "default": "/",
+          "description": "Base remote directory for browsing and deployments."
+        },
+        "remoteDeploy.mappings": {
+          "type": "array",
+          "default": [],
+          "description": "Maps an absolute local directory to a deployment path on the server.",
+          "items": {
+            "type": "object",
+            "required": ["localPath", "deploymentPath"],
+            "properties": {
+              "localPath": { "type": "string" },
+              "deploymentPath": { "type": "string" },
+              "webPath": { "type": "string" }
+            }
+          }
+        },
+        "remoteDeploy.privateKeyPath": {
+          "type": "string",
+          "default": "",
+          "description": "Optional path to an SSH private key."
+        },
+        "remoteDeploy.uploadOnSave": {
+          "type": "boolean",
+          "default": false,
+          "description": "Upload saved mapped files to their selected SFTP profile."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p .",
+    "watch": "tsc -watch -p .",
+    "package": "vsce package"
+  },
+  "dependencies": {
+    "ssh2-sftp-client": "^11.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "@types/ssh2-sftp-client": "^9.0.6",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^3.2.1",
+    "typescript": "^5.4.5"
+  }
+}
