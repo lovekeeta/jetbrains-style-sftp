@@ -159,12 +159,12 @@ class RemoteExplorer implements vscode.TreeDataProvider<RemoteNode> {
     try {
       const entries = await this.sftp.list(nodeProfile, remotePath);
       return entries.filter(entry => entry.name !== '.' && entry.name !== '..').sort((a, b) => Number(b.type === 'd') - Number(a.type === 'd') || a.name.localeCompare(b.name)).map(entry => new RemoteNode(entry.type === 'd' ? 'directory' : 'file', nodeProfile, path.posix.join(remotePath, entry.name), entry.size));
-    } catch (error) { vscode.window.showErrorMessage(`Remote Deploy: ${messageOf(error)}`); return []; }
+    } catch (error) { vscode.window.showErrorMessage(`JetBrains style SFTP: ${messageOf(error)}`); return []; }
   }
 }
 
 export function activate(context: vscode.ExtensionContext): void {
-  const log = vscode.window.createOutputChannel('CG Remote Deploy', { log: true });
+  const log = vscode.window.createOutputChannel('JetBrains style SFTP', { log: true });
   const sftp = new SftpService(context.secrets, log);
   const explorer = new RemoteExplorer(sftp);
   const remoteFileSystem = new RemoteFileSystemProvider(sftp);
@@ -193,7 +193,7 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('remoteDeploy.selectServer', async () => {
       const settings = getSettings();
       if (!settings.profiles.length) { openProfilesPanel(context, sftp, explorer); return; }
-      const selected = await vscode.window.showQuickPick(settings.profiles.slice().sort((a, b) => a.name.localeCompare(b.name)).map(profile => ({ label: profile.name, description: `${profile.username}@${profile.host}:${profile.port}`, detail: profile.id === settings.defaultProfileId ? 'Currently selected' : undefined, profile })), { placeHolder: 'Choose a configured SFTP server', title: 'CG Remote Deploy: Switch SFTP Server', matchOnDescription: true, matchOnDetail: true });
+      const selected = await vscode.window.showQuickPick(settings.profiles.slice().sort((a, b) => a.name.localeCompare(b.name)).map(profile => ({ label: profile.name, description: `${profile.username}@${profile.host}:${profile.port}`, detail: profile.id === settings.defaultProfileId ? 'Currently selected' : undefined, profile })), { placeHolder: 'Choose a configured SFTP server', title: 'JetBrains style SFTP: Switch SFTP Server', matchOnDescription: true, matchOnDetail: true });
       if (!selected) { return; }
       await vscode.workspace.getConfiguration('remoteDeploy').update('defaultProfileId', selected.profile.id, vscode.ConfigurationTarget.Workspace);
       await sftp.dispose(); explorer.refresh();
@@ -504,7 +504,7 @@ function openProfilesPanel(context: vscode.ExtensionContext, sftp: SftpService, 
       await vscode.workspace.getConfiguration('remoteDeploy').update('defaultProfileId', defaultProfileId, vscode.ConfigurationTarget.Workspace);
       await sftp.dispose(); explorer.refresh();
       panel.webview.postMessage({ type: 'deleted', profiles, defaultProfileId, text: `${profileName} deleted.` });
-      vscode.window.showInformationMessage(`Remote Deploy: ${profileName} deleted.`);
+      vscode.window.showInformationMessage(`JetBrains style SFTP: ${profileName} deleted.`);
       return;
     }
     if (message.type === 'save' && message.profile) {
@@ -519,7 +519,7 @@ function openProfilesPanel(context: vscode.ExtensionContext, sftp: SftpService, 
       await vscode.workspace.getConfiguration('remoteDeploy').update('defaultProfileId', defaultProfileId, vscode.ConfigurationTarget.Workspace);
       await sftp.dispose(); explorer.refresh();
       panel.webview.postMessage({ type: 'saved', profiles, defaultProfileId, selectedProfileId: profile.id, text: `${profile.name} saved for this workspace.` });
-      vscode.window.showInformationMessage(`Remote Deploy: ${profile.name} saved for this workspace.`);
+      vscode.window.showInformationMessage(`JetBrains style SFTP: ${profile.name} saved for this workspace.`);
     }
   }, undefined, context.subscriptions);
 }
@@ -541,7 +541,7 @@ function getSettings(): Settings {
 }
 function normalizeProfile(profile: DeploymentProfile): DeploymentProfile { const { group: _group, ...flatProfile } = profile as DeploymentProfile & { group?: string }; return { ...flatProfile, authMethod: profile.authMethod === 'privateKey' ? 'privateKey' : 'password', id: profile.id || crypto.randomUUID(), name: profile.name || profile.host, port: Number(profile.port) || 22, remoteRoot: normalizeRemotePath(profile.remoteRoot || '/'), mappings: (profile.mappings || []).filter(mapping => mapping.localPath && mapping.deploymentPath).map(mapping => ({ localPath: path.resolve(mapping.localPath), deploymentPath: normalizeRemotePath(mapping.deploymentPath), webPath: mapping.webPath })) }; }
 function selectedProfile(settings: Settings): DeploymentProfile { const profile = settings.profiles.find(item => item.id === settings.defaultProfileId) ?? settings.profiles[0]; if (!profile) { throw new Error('Create an SFTP profile first.'); } return profile; }
-async function selectProfileForLocalAction(action: string): Promise<DeploymentProfile | undefined> { const settings = getSettings(); if (!settings.profiles.length) { vscode.window.showWarningMessage('Create an SFTP profile first.'); return undefined; } const defaultId = settings.defaultProfileId; const selected = await vscode.window.showQuickPick(settings.profiles.slice().sort((a, b) => a.name.localeCompare(b.name)).map(profile => ({ label: profile.name, description: `${profile.username}@${profile.host}:${profile.port}`, detail: profile.id === defaultId ? 'Workspace default' : undefined, profile })), { title: 'CG Remote Deploy: Select Server', placeHolder: `Select the server to ${action}`, ignoreFocusOut: true }); return selected?.profile; }
+async function selectProfileForLocalAction(action: string): Promise<DeploymentProfile | undefined> { const settings = getSettings(); if (!settings.profiles.length) { vscode.window.showWarningMessage('Create an SFTP profile first.'); return undefined; } const defaultId = settings.defaultProfileId; const selected = await vscode.window.showQuickPick(settings.profiles.slice().sort((a, b) => a.name.localeCompare(b.name)).map(profile => ({ label: profile.name, description: `${profile.username}@${profile.host}:${profile.port}`, detail: profile.id === defaultId ? 'Workspace default' : undefined, profile })), { title: 'JetBrains style SFTP: Select Server', placeHolder: `Select the server to ${action}`, ignoreFocusOut: true }); return selected?.profile; }
 function mappingRemotePath(profile: DeploymentProfile, mapping: PathMapping): string { const root = normalizeRemotePath(profile.remoteRoot || '/'); const deployment = normalizeRemotePath(mapping.deploymentPath || '/'); return deployment === root || deployment.startsWith(`${root}/`) ? deployment : path.posix.join(root, deployment.replace(/^\/+/, '')); }
 function remotePathFor(profile: DeploymentProfile, localPath: string): string { const resolvedLocalPath = path.resolve(localPath); const mapping = profile.mappings.filter(m => isPathWithin(resolvedLocalPath, m.localPath)).sort((a, b) => b.localPath.length - a.localPath.length)[0]; if (mapping) { return path.posix.join(mappingRemotePath(profile, mapping), path.relative(mapping.localPath, resolvedLocalPath).split(path.sep).join('/')); } const root = workspaceRootFor(resolvedLocalPath); if (!root) { throw new Error(`File is outside every open workspace folder and has no path mapping in ${profile.name}. Add a mapping for ${resolvedLocalPath} in Connection Hierarchy.`); } return path.posix.join(profile.remoteRoot, path.relative(root, resolvedLocalPath).split(path.sep).join('/')); }
 function isPathWithin(candidate: string, parent: string): boolean { const relative = path.relative(path.resolve(parent), path.resolve(candidate)); return relative === '' || (!relative.startsWith('..') && !path.isAbsolute(relative)); }

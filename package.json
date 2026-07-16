@@ -1,6 +1,6 @@
 {
   "name": "remote-deploy",
-  "displayName": "CG Remote Deploy",
+  "displayName": "JetBrains style SFTP",
   "description": "Browse SFTP servers, compare local files, and deploy changes from VS Code.",
   "version": "0.0.4",
   "publisher": "local",
@@ -36,7 +36,7 @@
       "activitybar": [
         {
           "id": "remoteDeploy",
-          "title": "CG Remote Deploy",
+          "title": "JetBrains style SFTP",
           "icon": "media/remote-host.svg"
         }
       ]
@@ -44,7 +44,7 @@
     "submenus": [
       {
         "id": "remoteDeploy.localActions",
-        "label": "CG Remote Deploy"
+        "label": "JetBrains style SFTP"
       }
     ],
     "views": {
@@ -240,7 +240,7 @@
       ]
     },
     "configuration": {
-      "title": "CG Remote Deploy",
+      "title": "JetBrains style SFTP",
       "properties": {
         "remoteDeploy.profiles": {
           "type": "array",

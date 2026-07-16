@@ -1,6 +1,6 @@
-# K12 SFTP
+# JetBrains style SFTP
 
-**K12 SFTP** is a Visual Studio Code extension for browsing SFTP servers, comparing remote and local files, and deploying changes without leaving the editor. It is designed for projects that need one or more SFTP targets with clear, workspace-specific path mappings.
+**JetBrains style SFTP** is a Visual Studio Code extension for browsing SFTP servers, comparing remote and local files, and deploying changes without leaving the editor. It is designed for projects that need one or more SFTP targets with clear, workspace-specific path mappings.
 
 > The extension currently targets VS Code 1.85 or later and communicates over SFTP (SSH).
 
@@ -57,15 +57,15 @@ Open the folder in VS Code and press `F5` to launch an Extension Development Hos
 ## Quick Start
 
 1. Open the project folder you want to deploy in VS Code.
-2. Open the **CG Remote Deploy** view from the Activity Bar.
-3. Click **Configuration** in the view title bar, or run **CG Remote Deploy: Configuration** from the Command Palette.
+2. Open the **JetBrains style SFTP** view from the Activity Bar.
+3. Click **Configuration** in the view title bar, or run **JetBrains style SFTP: Configuration** from the Command Palette.
 4. Select **Add SFTP**, then enter the connection details:
    - Profile name, host, port, username, and remote root.
    - **Password** or **SSH private key** authentication.
    - One or more local-to-remote path mappings.
 5. Click **Test Connection**, then **Save Current Profile**.
 6. Set the profile as **Workspace default** if it should be the usual deployment target.
-7. Right-click a local file or folder in Explorer and choose an action from the **CG Remote Deploy** submenu.
+7. Right-click a local file or folder in Explorer and choose an action from the **JetBrains style SFTP** submenu.
 
 The Remote Files tree shows the default profile. Use **Select Server** in its title bar to switch it.
 
@@ -159,7 +159,7 @@ Do not add passwords to `settings.json` or commit credentials to source control.
 
 ### Local-file actions
 
-Right-click a local file or folder in VS Code Explorer, or right-click an open local editor, to find **CG Remote Deploy** actions.
+Right-click a local file or folder in VS Code Explorer, or right-click an open local editor, to find **JetBrains style SFTP** actions.
 
 
 | Action                                          | What it does                                                                                                            |
@@ -182,7 +182,7 @@ For open text documents, comparisons and preview deployments use the current edi
 
 ### Remote Files view
 
-Open the **CG Remote Deploy** Activity Bar view to browse the currently selected profile from its configured remote root. Directories appear before files.
+Open the **JetBrains style SFTP** Activity Bar view to browse the currently selected profile from its configured remote root. Directories appear before files.
 
 Right-click a remote item to:
 
@@ -231,17 +231,17 @@ All commands are available through the Command Palette (`Ctrl+Shift+P` / `Cmd+Sh
 
 | Command                                                    | Purpose                                                                |
 | ---------------------------------------------------------- | ---------------------------------------------------------------------- |
-| `CG Remote Deploy: Configuration`                          | Open the profile and mapping editor.                                   |
-| `CG Remote Deploy: Select Server`                          | Change the workspace-default profile.                                  |
-| `CG Remote Deploy: Refresh Remote Files`                   | Reconnect and refresh the remote tree.                                 |
-| `CG Remote Deploy: Show File Transfer Log`                 | Open the extension's log output channel.                               |
-| `CG Remote Deploy: Upload to Default SFTP`                 | Upload a local file to the default profile.                            |
-| `CG Remote Deploy: Upload to Selected SFTP...`             | Upload a local file after choosing a profile.                          |
-| `CG Remote Deploy: Sync with Deployed on Default SFTP`     | Review and deploy selected local files/folders to the default profile. |
-| `CG Remote Deploy: Sync with Deployed on Selected SFTP...` | Review and deploy after choosing a profile.                            |
-| `CG Remote Deploy: Compare with Default SFTP`              | Compare a local file with its default-profile counterpart.             |
-| `CG Remote Deploy: Compare with Selected SFTP...`          | Compare a local file after choosing a profile.                         |
-| `CG Remote Deploy: Compare with Clipboard`                 | Compare copied text with a local file.                                 |
+| `JetBrains style SFTP: Configuration`                          | Open the profile and mapping editor.                                   |
+| `JetBrains style SFTP: Select Server`                          | Change the workspace-default profile.                                  |
+| `JetBrains style SFTP: Refresh Remote Files`                   | Reconnect and refresh the remote tree.                                 |
+| `JetBrains style SFTP: Show File Transfer Log`                 | Open the extension's log output channel.                               |
+| `JetBrains style SFTP: Upload to Default SFTP`                 | Upload a local file to the default profile.                            |
+| `JetBrains style SFTP: Upload to Selected SFTP...`             | Upload a local file after choosing a profile.                          |
+| `JetBrains style SFTP: Sync with Deployed on Default SFTP`     | Review and deploy selected local files/folders to the default profile. |
+| `JetBrains style SFTP: Sync with Deployed on Selected SFTP...` | Review and deploy after choosing a profile.                            |
+| `JetBrains style SFTP: Compare with Default SFTP`              | Compare a local file with its default-profile counterpart.             |
+| `JetBrains style SFTP: Compare with Selected SFTP...`          | Compare a local file after choosing a profile.                         |
+| `JetBrains style SFTP: Compare with Clipboard`                 | Compare copied text with a local file.                                 |
 
 Remote-view actions such as download, rename, delete, preview, and sync are exposed in the item's context menu.
 
@@ -292,11 +292,11 @@ package.json           VS Code manifest, commands, settings, and npm scripts
 | A folder preview is empty                  | Check the selected folder, then review the profile's exclusion patterns and explicit local paths. Symbolic links are skipped during folder scans.                  |
 | Upload on save does not run                | Confirm the workspace is trusted, upload-on-save is enabled for the profile or workspace, and the saved file has a valid destination. Check the File Transfer Log. |
 | A diff is unavailable                      | The built-in text comparison is intentionally disabled for binary content. Deploy or download the binary file directly instead.                                    |
-| Remote tree looks stale                    | Run**CG Remote Deploy: Refresh Remote Files** to reconnect and reload the directory.                                                                               |
+| Remote tree looks stale                    | Run**JetBrains style SFTP: Refresh Remote Files** to reconnect and reload the directory.                                                                               |
 
 ## Current Scope
 
-CG Remote Deploy supports SFTP over SSH. It does not provide FTP, FTPS, or SCP transport modes.
+JetBrains style SFTP supports SFTP over SSH. It does not provide FTP, FTPS, or SCP transport modes.
 
 ## License
 
