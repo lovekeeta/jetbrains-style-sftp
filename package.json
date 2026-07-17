@@ -1,8 +1,8 @@
 {
   "name": "remote-deploy",
-  "displayName": "CG Remote Deploy",
+  "displayName": "JetBrains style SFTP",
   "description": "Browse SFTP servers, compare local files, and deploy changes from VS Code.",
-  "version": "0.0.4",
+  "version": "0.0.7",
   "publisher": "local",
   "engines": {
     "vscode": "^1.85.0"
@@ -28,7 +28,9 @@
     "onCommand:remoteDeploy.syncLocal",
     "onCommand:remoteDeploy.compare",
     "onCommand:remoteDeploy.selectServer",
-    "onCommand:remoteDeploy.refresh"
+    "onCommand:remoteDeploy.refresh",
+    "onCommand:remoteDeploy.compareLocal",
+    "onCommand:remoteDeploy.showLog"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -36,7 +38,7 @@
       "activitybar": [
         {
           "id": "remoteDeploy",
-          "title": "CG Remote Deploy",
+          "title": "JetBrains style SFTP",
           "icon": "media/remote-host.svg"
         }
       ]
@@ -44,7 +46,7 @@
     "submenus": [
       {
         "id": "remoteDeploy.localActions",
-        "label": "CG Remote Deploy"
+        "label": "JetBrains style SFTP"
       }
     ],
     "views": {
@@ -92,7 +94,7 @@
       },
       {
         "command": "remoteDeploy.download",
-        "title": "Download from Here..."
+        "title": "Download from Here"
       },
       {
         "command": "remoteDeploy.previewRemote",
@@ -100,15 +102,15 @@
       },
       {
         "command": "remoteDeploy.renameRemote",
-        "title": "Rename..."
+        "title": "Rename"
       },
       {
         "command": "remoteDeploy.deleteRemote",
-        "title": "Delete..."
+        "title": "Delete"
       },
       {
         "command": "remoteDeploy.syncLocal",
-        "title": "Sync With Local..."
+        "title": "Sync With Local"
       },
       {
         "command": "remoteDeploy.compareLocal",
@@ -135,6 +137,62 @@
       {
         "command": "remoteDeploy.showLog",
         "title": "Show File Transfer Log"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "remoteDeploy.download",
+        "key": "ctrl+alt+shift+d",
+        "mac": "cmd+alt+shift+d",
+        "when": "(focusedView == remoteDeploy.explorer || focusedView == remoteDeploy.explorerFallback)"
+      },
+      {
+        "command": "remoteDeploy.syncLocal",
+        "key": "ctrl+alt+shift+s",
+        "mac": "cmd+alt+shift+s",
+        "when": "(focusedView == remoteDeploy.explorer || focusedView == remoteDeploy.explorerFallback)"
+      },
+      {
+        "command": "remoteDeploy.renameRemote",
+        "key": "ctrl+alt+shift+r",
+        "mac": "cmd+alt+shift+r",
+        "when": "(focusedView == remoteDeploy.explorer || focusedView == remoteDeploy.explorerFallback)"
+      },
+      {
+        "command": "remoteDeploy.deleteRemote",
+        "key": "ctrl+alt+shift+delete",
+        "mac": "cmd+alt+shift+backspace",
+        "when": "(focusedView == remoteDeploy.explorer || focusedView == remoteDeploy.explorerFallback)"
+      },
+      {
+        "command": "remoteDeploy.compareLocal",
+        "key": "ctrl+alt+shift+c",
+        "mac": "cmd+alt+shift+c",
+        "when": "(focusedView == remoteDeploy.explorer || focusedView == remoteDeploy.explorerFallback)"
+      },
+      {
+        "command": "remoteDeploy.uploadDefault",
+        "key": "ctrl+alt+shift+u",
+        "mac": "cmd+alt+shift+u",
+        "when": "editorTextFocus && resourceScheme == file"
+      },
+      {
+        "command": "remoteDeploy.previewDeployDefault",
+        "key": "ctrl+alt+shift+y",
+        "mac": "cmd+alt+shift+y",
+        "when": "editorTextFocus && resourceScheme == file"
+      },
+      {
+        "command": "remoteDeploy.compareDefault",
+        "key": "ctrl+alt+shift+v",
+        "mac": "cmd+alt+shift+v",
+        "when": "editorTextFocus && resourceScheme == file"
+      },
+      {
+        "command": "remoteDeploy.compareClipboard",
+        "key": "ctrl+alt+shift+b",
+        "mac": "cmd+alt+shift+b",
+        "when": "editorTextFocus && resourceScheme == file"
       }
     ],
     "menus": {
@@ -240,7 +298,7 @@
       ]
     },
     "configuration": {
-      "title": "CG Remote Deploy",
+      "title": "JetBrains style SFTP",
       "properties": {
         "remoteDeploy.profiles": {
           "type": "array",

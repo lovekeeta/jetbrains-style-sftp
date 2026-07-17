@@ -18,3 +18,4 @@ template.generated.html
 .vscode
 .vscodeignore
 .codex
+.workbuddy*
