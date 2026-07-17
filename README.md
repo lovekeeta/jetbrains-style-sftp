@@ -40,7 +40,7 @@ Download a `.vsix` package from the project releases, then either:
 Or install it from a terminal:
 
 ```powershell
-code --install-extension remote-deploy-0.0.4.vsix
+code --install-extension jetbrains-style-sftp-0.0.7.vsix
 ```
 
 ### Build from source
@@ -67,7 +67,7 @@ Open the folder in VS Code and press `F5` to launch an Extension Development Hos
 6. Set the profile as **Workspace default** if it should be the usual deployment target.
 7. Right-click a local file or folder in Explorer and choose an action from the **JetBrains style SFTP** submenu.
 
-The Remote Files tree shows the default profile. Use **Select Server** in its title bar to switch it.
+The Remote Files tree shows the default profile. Use **Select Server** in its title bar to open a modal-style server selector with a dimmed overlay and centered dialog card. The selector supports search, full-row selection, and Up/Down plus Enter or Space keyboard navigation. Closing it or choosing Cancel leaves the current default unchanged. VS Code renders the dialog inside a Webview panel, while the overlay provides the modal presentation.
 
 ## Configuring Connections
 
@@ -165,18 +165,20 @@ Right-click a local file or folder in VS Code Explorer, or right-click an open l
 | Action                                          | What it does                                                                                                            |
 | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | **Upload to Default SFTP**                      | Uploads the selected local file to the workspace-default profile.                                                       |
-| **Upload to Selected SFTP...**                  | Prompts for one of the configured profiles, then uploads the local file.                                                |
-| **Sync with Deployed on Default/Selected SFTP** | Scans the selected file or folder, lets you review local and server versions, then deploys selected files or all files. |
-| **Compare with Default/Selected SFTP**          | Opens VS Code's diff editor for the local and remote versions of one file.                                              |
+| **Upload to Selected SFTP...**                  | Opens the searchable editor-area server selector, then uploads to that profile without changing the workspace default. |
+| **Sync with Deployed on Default/Selected SFTP** | The Selected variant opens the searchable editor-area server selector without changing the default; the preview lists multiple files and supports Sync Selected, Sync All, and Compare. |
+| **Compare with Default/Selected SFTP**          | Opens VS Code's diff editor; the Selected variant uses the editor-area selector once and does not change the default.   |
 | **Compare with Clipboard**                      | Opens a diff editor between copied text and the selected local file.                                                    |
 
 The preview marks files as new, modified, or identical. For text files, it displays an inline comparison and can open VS Code's full diff editor. Binary files can still be deployed, but are not displayed as text diffs.
 
 Before deploying from the preview, you can:
 
-- deploy the selected file or all scanned files;
-- compare a selected text file in VS Code; or
-- overwrite the local file with its existing server version.
+- compare a selected text file in VS Code;
+- overwrite the local file with its existing server version; or
+- deploy the selected file or all scanned files.
+
+The remote-to-local sync preview also lists every selected file and provides **Sync Selected**, **Sync All**, and **Compare** actions.
 
 For open text documents, comparisons and preview deployments use the current editor content, including unsaved edits.
 
@@ -233,6 +235,22 @@ All commands are available through the Command Palette (`Ctrl+Shift+P` / `Cmd+Sh
 | ---------------------------------------------------------- | ---------------------------------------------------------------------- |
 | `JetBrains style SFTP: Configuration`                          | Open the profile and mapping editor.                                   |
 | `JetBrains style SFTP: Select Server`                          | Change the workspace-default profile.                                  |
+
+### Keyboard shortcuts
+
+The extension adds scoped shortcuts for common right-click actions. Remote-tree actions work when the Remote Files tree is focused; local-file actions work when a local file editor is focused.
+
+| Action | Windows/Linux | macOS |
+| --- | --- | --- |
+| Download remote item | Ctrl+Alt+Shift+D | Cmd+Alt+Shift+D |
+| Sync remote item with local | Ctrl+Alt+Shift+S | Cmd+Alt+Shift+S |
+| Rename remote item | Ctrl+Alt+Shift+R | Cmd+Alt+Shift+R |
+| Delete remote item | Ctrl+Alt+Shift+Delete | Cmd+Alt+Shift+Backspace |
+| Compare remote item with local | Ctrl+Alt+Shift+C | Cmd+Alt+Shift+C |
+| Upload to default SFTP | Ctrl+Alt+Shift+U | Cmd+Alt+Shift+U |
+| Sync with deployed default SFTP | Ctrl+Alt+Shift+Y | Cmd+Alt+Shift+Y |
+| Compare with default SFTP | Ctrl+Alt+Shift+V | Cmd+Alt+Shift+V |
+| Compare with clipboard | Ctrl+Alt+Shift+B | Cmd+Alt+Shift+B |
 | `JetBrains style SFTP: Refresh Remote Files`                   | Reconnect and refresh the remote tree.                                 |
 | `JetBrains style SFTP: Show File Transfer Log`                 | Open the extension's log output channel.                               |
 | `JetBrains style SFTP: Upload to Default SFTP`                 | Upload a local file to the default profile.                            |
@@ -267,8 +285,8 @@ npm run compile
 # Recompile when source files change
 npm run watch
 
-# Build a distributable VSIX package
-npm run package
+# Build the versioned distributable VSIX package
+npm run package -- --out jetbrains-style-sftp-0.0.7.vsix
 ```
 
 Press `F5` in VS Code after compiling to run the extension in an Extension Development Host. The compiled entry point is `out/extension.js`.
